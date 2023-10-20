@@ -24,7 +24,7 @@ $(function () {
             var json = {name: name, phone: phone, email: email, message: message}
             $.ajax({
                 // --- CHANGE THIS LINE TO YOUR OWN API GATEWAY  -------- 
-                url: https://f3wq76tnq2.execute-api.eu-west-1.amazonaws.com/contact,
+                url: 'https://f3wq76tnq2.execute-api.eu-west-1.amazonaws.com/Deploy/ZeroVerse_Lambda',
                 // ------------------------------------------------------  
                 type: "POST",
                 data: JSON.stringify(json),
