@@ -1,4 +1,3 @@
-
 """
     Lambda function that decodes and writes data from your portfolio website to your DynamoDB database.
 
@@ -18,7 +17,7 @@
 import boto3    # Python AWS SDK
 import json     # Used for handling API-based data.
 import base64   # Needed to decode the incoming POST data
-import uuid
+import random
 
 def lambda_handler(event, context):
     
@@ -35,17 +34,18 @@ def lambda_handler(event, context):
     # on a unique value to prevent errors when writing to DynamoDB. **
     
     # --- Insert your code here ---
-    rid = str(uuid.uuid4()) # <--- Replace this value with your code.
+    rid = random.randint(1, 1000000000) # <--- Replace this value with your code.
     # -----------------------------
     
     # ** Instantiate the DynamoDB service with the help of the boto3 library **
     
     # --- Insert your code here ---
-    dynamodb = boto3.resource('dynamodb')  # <--- Replace this value with your code.
+    dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')  # <--- Replace this value with your code.
     # -----------------------------
     
     # Instantiate the table. Remember pass the name of the DynamoDB table created in step 4
-    table = dynamodb.Table(Zero-Verse_DB)
+    table_name = 'Zero-Verse_DB'
+    table = dynamodb.Table(table_name)
     
     # ** Write the responses to the table using the put_item method. **
 
@@ -75,6 +75,4 @@ def lambda_handler(event, context):
     }
     
     return lambda_response
-
-
-
+    
