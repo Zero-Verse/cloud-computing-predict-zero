@@ -297,7 +297,7 @@ def lambda_handler(event, context):
     # --- Insert your code here ---
     email_text = f"Sentiment: {sentiment}\nKey Phrases: {', '.join(phrase)}"
     # Do not change the name of this variable
-    email_text = None 
+    #email_text = Text 
     
     # -----------------------------
             
