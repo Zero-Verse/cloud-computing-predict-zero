@@ -246,14 +246,9 @@ def lambda_handler(event, context):
     # Do not modify the email subject line
     SUBJECT = f"Data Science Portfolio Project Website - Hello {dec_dict['name']}"
 
-    # -----------------------------
-# Perform JSON data decoding 
-    body_enc = event['body']
-    dec_dict = json.loads(base64.b64decode(body_enc))
-
     # Sample text that you would like to email to your recipient 
     # address from your sender address.
-    email_text = 'Insert your sample email here'
+    email_text = f"Sentiment: {sentiment}\nKey Phrases: {', '.join(phrase)}"
 
     # ** SES Functionality **
 
@@ -276,7 +271,7 @@ def lambda_handler(event, context):
     # -------------------------------
 
     # The email body for recipients with non-HTML email clients
-    BODY_TEXT = (email_text)
+    BODY_TEXT = email_text
 
     # The character encoding for the email.
     CHARSET = "UTF-8"
