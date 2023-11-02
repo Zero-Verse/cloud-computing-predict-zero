@@ -213,13 +213,6 @@ def lambda_handler(event, context):
     
 
     # ** Insert code to write to dynamodb **
-    # <<< Ensure that the DynamoDB write response object is saved 
-    #    as the variable `db_response` >>> 
-    # --- Insert your code here ---
- # ** Create a variable that can take a random value between 1 and 1 000 000 000. 
-    # This variable will be used as our key value i.e the ResponsesID and should be of type integer.
-    # It is important to note that the ResponseID i.e. the rid variable, should take
-    # on a unique value to prevent errors when writing to DynamoDB. **
     
     # --- Insert your code here ---
     rid = random.randint(1, 1000000000) # <--- Replace this value with your code.
@@ -249,68 +242,12 @@ def lambda_handler(event, context):
     })
     # -----------------------------
 
-    # ** Create a response object to inform the website 
-    #    that the workflow executed successfully. **
-    lambda_response = {
-        'statusCode': 200,
-        'body': json.dumps({
-        'Name': dec_dict['name'],
-        'Email': dec_dict['email'],
-        'Cell': dec_dict['phone'], 
-        'Message': dec_dict['message'],
-        'DB_response': db_response
-        })
-    }
-    
-    return lambda_response
+   
+    # Do not modify the email subject line
+    SUBJECT = f"Data Science Portfolio Project Website - Hello {dec_dict['name']}"
 
-    # Do not change the name of this variable
-    db_response = None
     # -----------------------------
-    
-
-    # --- Amazon Comprehend ---
-    comprehend = boto3.client(service_name='comprehend')
-    
-    # --- Insert your code here ---
-    enquiry_text = website_message  # <--- Insert code to place the website message into this variable
-    # -----------------------------
-    
-    # --- Insert your code here ---
-    sentiment = comprehend.detect_sentiment(Text=enquiry_text, LanguageCode='en') # <---Insert code to get the sentiment with AWS comprehend
-    sentiment = sentiment_response['Sentiment'] 
-    # -----------------------------
-    
-    # --- Insert your code here ---
-    key_phrases = comprehend.detect_key_phrases(Text=enquiry_text, LanguageCode='en')
-    key_phrases = key_phrases_response['KeyPhrases'] # <--- Insert code to get the key phrases with AWS comprehend
-    # -----------------------------
-    
-    # Get list of phrases in numpy array
-    phrase = []
-    for i in range(0, len(key_phrases['KeyPhrases'])-1):
-        phrase = np.append(phrase, key_phrases['KeyPhrases'][i]['Text'])
-
-
-    # ** Use the `email_response` function to generate the text for your email response **
-    # <<< Ensure that the response text is stored in the variable `email_text` >>> 
-    # --- Insert your code here ---
-    email_text = f"Sentiment: {sentiment}\nKey Phrases: {', '.join(phrase)}"
-    # Do not change the name of this variable
-    #email_text = Text 
-    
-    # -----------------------------
-            
-
-    # ** SES Functionality **
-
-    # Insert code to send an email, using AWS SES, with the above defined 
-    # `email_text` variable as it's body.
-    # <<< Ensure that the SES service response is stored in the variable `ses_response` >>> 
-    # --- Insert your code here ---
-def lambda_handler(event, context):
-    
-    # Perform JSON data decoding 
+# Perform JSON data decoding 
     body_enc = event['body']
     dec_dict = json.loads(base64.b64decode(body_enc))
 
@@ -380,32 +317,6 @@ def lambda_handler(event, context):
         print("Email sent! Message ID:"),
         print(ses_response['MessageId'])
 
-    # ** Create a response object to inform the website 
-    #    that the workflow executed successfully. **
-    lambda_response = {
-        'statusCode': 200,
-        'body': json.dumps({
-        'Name': dec_dict['name'],
-        'Email': dec_dict['email'],
-        'Cell': dec_dict['phone'], 
-        'Message': dec_dict['message'],
-        'SES_response': ses_response,
-        'Email_message': email_text
-        })
-    }
-
-    return lambda_response
-    # Do not change the name of this variable
-    ses_response = None
-    
-    # ...
-
-    # Do not modify the email subject line
-    SUBJECT = f"Data Science Portfolio Project Website - Hello {dec_dict['name']}"
-
-    # -----------------------------
-
-
     # ** Create a response object to inform the website that the 
     #    workflow executed successfully. Note that this object is 
     #    used during predict marking and should not be modified.**
@@ -422,9 +333,54 @@ def lambda_handler(event, context):
         'Email_message': email_text
         })
     }
+    return lambda_response  
+
+
+    
+
+    # --- Amazon Comprehend ---
+    comprehend = boto3.client(service_name='comprehend')
+    
+    # --- Insert your code here ---
+    enquiry_text = website_message  # <--- Insert code to place the website message into this variable
     # -----------------------------
     
-    return lambda_response   
+    # --- Insert your code here ---
+    sentiment = comprehend.detect_sentiment(Text=enquiry_text, LanguageCode='en') # <---Insert code to get the sentiment with AWS comprehend
+    sentiment = sentiment_response['Sentiment'] 
+    # -----------------------------
+    
+    # --- Insert your code here ---
+    key_phrases = comprehend.detect_key_phrases(Text=enquiry_text, LanguageCode='en')
+    key_phrases = key_phrases_response['KeyPhrases'] # <--- Insert code to get the key phrases with AWS comprehend
+    # -----------------------------
+    
+    # Get list of phrases in numpy array
+    phrase = []
+    for i in range(0, len(key_phrases['KeyPhrases'])-1):
+        phrase = np.append(phrase, key_phrases['KeyPhrases'][i]['Text'])
+
+
+    # ** Use the `email_response` function to generate the text for your email response **
+    # <<< Ensure that the response text is stored in the variable `email_text` >>> 
+    # --- Insert your code here ---
+    email_text = f"Sentiment: {sentiment}\nKey Phrases: {', '.join(phrase)}"
+    # Do not change the name of this variable
+    #email_text = Text 
+    
+    # -----------------------------
+            
+
+    # ** SES Functionality **
+
+    # Insert code to send an email, using AWS SES, with the above defined 
+    # `email_text` variable as it's body.
+    # <<< Ensure that the SES service response is stored in the variable `ses_response` >>> 
+    # --- Insert your code here ---
+
+    
+ 
+ 
     
 
 
